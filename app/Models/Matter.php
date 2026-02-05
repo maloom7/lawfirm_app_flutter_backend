@@ -19,8 +19,8 @@ class Matter extends Model
         'created_by',
     ];
 
-    public function status()
+    public function sessions()
     {
-        return $this->belongsTo(MatterStatus::class, 'matter_status_id');
+        return $this->hasMany(MatterSession::class);
     }
 }
