@@ -20,5 +20,11 @@ class MatterParty extends Model
     {
         return $this->belongsTo(Matter::class);
     }
+
+    public function parties()
+{
+    return $this->hasMany(MatterParty::class);
+}
+
 }
 

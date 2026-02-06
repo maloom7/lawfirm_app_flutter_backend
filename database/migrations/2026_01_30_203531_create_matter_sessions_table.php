@@ -9,47 +9,41 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('matter_sessions', function (Blueprint $table) {
-            $table->id();
+    $table->id();
 
-            // ربط بالقضية
-            $table->foreignId('matter_id')
-                ->constrained()
-                ->cascadeOnDelete();
+    $table->foreignId('matter_id')
+        ->constrained()
+        ->cascadeOnDelete();
 
-            // تاريخ ووقت الجلسة
-            $table->date('session_date');
-            $table->time('session_time')->nullable();
+    $table->date('session_date');
 
-            // المحكمة والدائرة
-            $table->string('court')->nullable();
-            $table->string('circuit')->nullable();
+    $table->string('court')->nullable();
+    $table->string('circuit')->nullable();
 
-            // حالة الجلسة
-            $table->enum('status', [
-                'scheduled',
-                'held',
-                'postponed',
-                'cancelled'
-            ])->default('scheduled');
+    $table->enum('session_type', ['in_person', 'remote'])
+        ->default('in_person');
 
-            // قرار الجلسة
-            $table->text('decision')->nullable();
+    // المحامي أو الموظف المسؤول عن الحضور
+    $table->foreignId('assigned_lawyer_id')
+        ->nullable()
+        ->constrained('users')
+        ->nullOnDelete();
 
-            // ملاحظات
-            $table->text('notes')->nullable();
+    // نتيجة الجلسة
+    $table->text('result')->nullable();
 
-            // المحامي/الموظف الحاضر
-            $table->foreignId('attended_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
+    // الإجراء القادم (جلسة قادمة، مذكرة، حكم...)
+    $table->text('next_action')->nullable();
 
-            $table->timestamps();
-        });
+    $table->text('notes')->nullable();
+
+    $table->timestamps();
+});
+
     }
 
-    public function down(): void
-    {
-        Schema::dropIfExists('matter_sessions');
-    }
+    // public function down(): void
+    // {
+    //     Schema::dropIfExists('matter_sessions');
+    // }
 };

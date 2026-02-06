@@ -9,13 +9,13 @@ class MatterSession extends Model
     protected $fillable = [
         'matter_id',
         'session_date',
-        'session_time',
         'court',
         'circuit',
-        'status',
-        'decision',
+        'session_type',
+        'assigned_lawyer_id',
+        'result',
+        'next_action',
         'notes',
-        'attended_by',
     ];
 
     public function matter()
@@ -23,8 +23,8 @@ class MatterSession extends Model
         return $this->belongsTo(Matter::class);
     }
 
-    public function attendee()
+    public function assignedLawyer()
     {
-        return $this->belongsTo(User::class, 'attended_by');
+        return $this->belongsTo(User::class, 'assigned_lawyer_id');
     }
 }
